@@ -12,10 +12,11 @@
 #include "esp_netif.h"
 #include "esp_smartconfig.h"
 #include "wifi_handler.h"
+#include "nvs_read_write.h"
 
 static const char *TAG = "WIFI_HANDLER";
 
-WIFI_RUNTIME_DATA g_wifi_state_data = WIFI_RUNTIME_DEFAULT_DATA;
+WIFI_RUNTIME_DATA_T g_wifi_state_data = WIFI_RUNTIME_DEFAULT_DATA;
 
 static EventGroupHandle_t s_wifi_event_group;
 static uint8_t g_led_state = 0;
@@ -93,6 +94,8 @@ static void smartconfig_event_handler(int32_t event_id, void* event_data)
             memcpy(g_wifi_state_data.password, evt->password, sizeof(g_wifi_state_data.password));
             g_wifi_state_data.is_configured = 1;
 
+            write_conf_to_flash();
+
             ESP_LOGI(TAG, "SSID: %s", evt->ssid);
             ESP_LOGI(TAG, "PASSWORD: %s", evt->password);
 
@@ -133,7 +136,7 @@ static void event_handler(void* arg, esp_event_base_t event_base, int32_t event_
     }
 }
 
-static void configure_wifi_credentials(void)
+void configure_wifi_credentials(void)
 {
     if (!g_wifi_state_data.is_configured)
     {
@@ -154,7 +157,7 @@ static void configure_wifi_credentials(void)
     ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config));
 }
 
-static void smartconfig_polling_task(void * parm)
+void smartconfig_polling_task(void * parm)
 {
     smartconfig_start_config_t cfg = SMARTCONFIG_START_CONFIG_DEFAULT();;
 
@@ -177,6 +180,8 @@ static void smartconfig_polling_task(void * parm)
 
 void initialize_wifi(void)
 {
+    get_conf_from_flash();
+
     ESP_ERROR_CHECK(esp_netif_init());
     s_wifi_event_group = xEventGroupCreate();
     ESP_ERROR_CHECK(esp_event_loop_create_default());

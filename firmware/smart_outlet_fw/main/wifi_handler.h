@@ -26,11 +26,11 @@ typedef struct
     WIFI_CONNECTION_E connection_state;
     uint8_t is_configured;
     
-}WIFI_RUNTIME_DATA;
+}WIFI_RUNTIME_DATA_T;
 
 void initialize_wifi(void);
-static void configure_wifi_credentials(void);
-static void smartconfig_polling_task(void * parm);
+void configure_wifi_credentials(void);
+void smartconfig_polling_task(void * parm);
 void config_status_led();
 void poll_wifi_status();
 

@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "wifi_handler.h": "c",
+        "string.h": "c",
+        "nvs_read_write.h": "c",
+        "smart_outlet_main.h": "c"
+    }
+}
