@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "smartconfig.h": "c",
+        "string.h": "c"
+    }
+}

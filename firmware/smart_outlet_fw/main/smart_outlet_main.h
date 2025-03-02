@@ -1,0 +1,4 @@
+#ifndef SMART_OUTLET_MAIN_H
+#define SMART_OUTLET_MAIN_H
+
+#endif
